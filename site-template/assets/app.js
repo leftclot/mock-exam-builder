@@ -75,6 +75,9 @@
       SRC_TYPES.map((t) => h("span", { class: "src-key" }, h("span", { class: `src-sq src-${t}`, "aria-hidden": "true" }), sourceLabel(t, owner))));
   }
 
+  // Keep number ranges like "1–14" from breaking at the dash.
+  const nobreak = (t) => String(t).replace(/(\d)–(\d)/g, "$1⁠–⁠$2");
+
   function letter(pct) {
     if (pct >= 80) return "A";
     if (pct >= 70) return "B";
@@ -121,7 +124,7 @@
       lessons.length
         ? h("ul", { class: "index" }, lessons.map((l) => h("li", {},
             h("div", {},
-              h("h3", {}, l.title),
+              h("h3", {}, nobreak(l.title)),
               h("div", { class: "meta" }, [l.date, l.focus ? `focus: ${l.focus}` : null].filter(Boolean).join(" · ")),
               h("div", { class: "history" }, (l.variants || []).map((v) => {
                 const hist = store.get(histKey(s.slug, l.slug, v)) || [];
@@ -157,10 +160,10 @@
         const num = h("span", { class: "q-num" }, `${qi + 1}.`);
         let input;
         if (sec.type === "mcq") {
-          input = h("div", {}, q.options.map((opt, oi) =>
+          input = h("div", { role: "radiogroup", "aria-label": `Question ${qi + 1} options` }, q.options.map((opt, oi) =>
             h("label", { class: "opt" }, h("input", { type: "radio", name: `s${si}q${qi}`, value: oi }), h("span", {}, `${"ABCDEFGH"[oi]}. ${opt}`))));
         } else {
-          input = h("textarea", { class: sec.type === "open" ? "open" : "", placeholder: sec.type === "open" ? "Write your answer…" : "Short answer…" });
+          input = h("textarea", { class: sec.type === "open" ? "open" : "", "aria-label": `Answer to question ${qi + 1}`, placeholder: sec.type === "open" ? "Write your answer…" : "Short answer…" });
         }
         const after = h("div");
         return { q, qi, input, after, el: h("div", { class: "q" }, h("div", { class: "q-prompt" }, num, q.prompt, srcSquare((srcById[(q.citation || {}).source] || {}).type, owner)), input, after) };
@@ -187,12 +190,12 @@
           } else {
             st.answers[qi] = input.value.trim() || "(no answer)";
             input.disabled = true;
-            const markRow = h("div", { class: "mark" });
+            const markRow = h("div", { class: "mark", role: "group", "aria-label": `Mark question ${qi + 1}` });
             [["Correct", 1], ["Partial", 0.5], ["Wrong", 0]].forEach(([txt, val]) => {
-              const b = h("button", { "data-v": val }, txt);
+              const b = h("button", { "data-v": val, "aria-pressed": "false" }, txt);
               b.addEventListener("click", () => {
                 st.marks[qi] = val;
-                markRow.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+                markRow.querySelectorAll("button").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", String(x === b)); });
                 refreshStatus();
                 refreshResultsBtn();
               });
@@ -267,7 +270,7 @@
     mount(
       ...masthead(cat.site, [{ text: "Home", href: "index.html" }, { text: subj.title, href: `subject.html?s=${encodeURIComponent(s)}` }, { text: `${exam.lesson.title} · Set ${String(v).toUpperCase()}` }]),
       h("div", { class: "label" }, `Mock exam · Set ${String(v).toUpperCase()}`),
-      h("h2", {}, exam.lesson.title),
+      h("h2", {}, nobreak(exam.lesson.title)),
       h("p", { class: "muted small" }, `${exam.sections.reduce((a, x) => a + x.questions.length, 0)} questions · ${exam.sections.length} section${exam.sections.length === 1 ? "" : "s"}. MCQ is auto-marked; written answers are self-marked against a model answer.`),
       exam.focus ? h("div", { class: "focus" }, `Focus: ${exam.focus}`) : null,
       srcLegend(owner),

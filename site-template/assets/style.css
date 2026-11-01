@@ -89,7 +89,7 @@ ul.index .meta { font-size: 12px; color: var(--muted); }
 .opt.correct { border-color: var(--ok); color: var(--ok); font-weight: 600; }
 .opt.wrong { border-color: var(--accent); color: var(--accent); text-decoration: line-through; }
 textarea {
-  width: 100%; min-height: 90px; font: inherit; font-size: 14px; color: var(--ink);
+  width: 100%; min-height: 90px; font: inherit; font-size: 16px; color: var(--ink);
   background: #FBFAF6; border: 1px solid var(--ink); border-radius: 0; padding: 10px; resize: vertical;
 }
 textarea.open { min-height: 170px; }
