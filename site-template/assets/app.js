@@ -62,6 +62,19 @@
     return type;
   }
 
+  const SRC_TYPES = ["personal", "official", "lecturer"];
+
+  function srcSquare(type, owner) {
+    if (!SRC_TYPES.includes(type)) return null;
+    const label = `Source: ${sourceLabel(type, owner)}`;
+    return h("span", { class: `src-sq src-${type}`, title: label, role: "img", "aria-label": label });
+  }
+
+  function srcLegend(owner) {
+    return h("div", { class: "src-legend" }, h("span", { class: "muted" }, "Question source:"),
+      SRC_TYPES.map((t) => h("span", { class: "src-key" }, h("span", { class: `src-sq src-${t}`, "aria-hidden": "true" }), sourceLabel(t, owner))));
+  }
+
   function letter(pct) {
     if (pct >= 80) return "A";
     if (pct >= 70) return "B";
@@ -150,7 +163,7 @@
           input = h("textarea", { class: sec.type === "open" ? "open" : "", placeholder: sec.type === "open" ? "Write your answer…" : "Short answer…" });
         }
         const after = h("div");
-        return { q, qi, input, after, el: h("div", { class: "q" }, h("div", { class: "q-prompt" }, num, q.prompt), input, after) };
+        return { q, qi, input, after, el: h("div", { class: "q" }, h("div", { class: "q-prompt" }, num, q.prompt, srcSquare((srcById[(q.citation || {}).source] || {}).type, owner)), input, after) };
       });
 
       const submit = h("button", { class: "primary" }, "Submit section");
@@ -257,6 +270,7 @@
       h("h2", {}, exam.lesson.title),
       h("p", { class: "muted small" }, `${exam.sections.reduce((a, x) => a + x.questions.length, 0)} questions · ${exam.sections.length} section${exam.sections.length === 1 ? "" : "s"}. MCQ is auto-marked; written answers are self-marked against a model answer.`),
       exam.focus ? h("div", { class: "focus" }, `Focus: ${exam.focus}`) : null,
+      srcLegend(owner),
       exam.sections.map(renderSection),
       h("hr", { class: "dither" }),
       h("div", { class: "actions" }, resultsBtn, h("span", { class: "small muted" }, "Submit and mark every section to unlock results.")),
