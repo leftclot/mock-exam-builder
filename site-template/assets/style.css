@@ -10,7 +10,7 @@
   /* question-source squares (kept clear of the red/green used for wrong/correct) */
   --src-personal: #C38A12;
   --src-official: #2F5D8A;
-  --src-lecturer: #7A3E8F;
+  --src-lecturer: #7A7D1E;
   /* 1-bit Bayer-style tiles (ink on transparent) */
   --d12: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%23111'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23111'/%3E%3C/svg%3E");
   --d25: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%23111'/%3E%3C/svg%3E");
