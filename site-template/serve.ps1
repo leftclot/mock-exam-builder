@@ -15,7 +15,8 @@ if (Test-Path $envFile) {
 $listening = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
 if (-not $listening) {
     $py = (Get-Command python -ErrorAction Stop).Source
-    Start-Process -FilePath $py -ArgumentList @("-m", "http.server", "$port", "--bind", "127.0.0.1", "--directory", "`"$siteDir`"") -WindowStyle Hidden
+    # serve.py only serves the public site files (never .env or sources/)
+    Start-Process -FilePath $py -ArgumentList @("`"$(Join-Path $siteDir 'serve.py')`"", "$port") -WindowStyle Hidden
     Write-Output "Static server started on http://127.0.0.1:$port"
 } else {
     Write-Output "Something is already listening on port $port - leaving it running."

@@ -24,4 +24,4 @@ Put this folder in `~/.claude/skills/`, then ask Claude to "make a mock exam fro
 - `SKILL.md`: the workflow Claude follows
 - `references/exam-schema.md`: exam JSON format and citation rules
 - `scripts/`: `transcribe.py`, `validate_exam.py`, `register_exam.py`, `init_site.py`
-- `site-template/`: the site engine (`index.html`, `subject.html`, `exam.html`, `assets/`, `serve.ps1`)
+- `site-template/`: the site engine (`index.html`, `subject.html`, `exam.html`, `assets/`, plus `serve.py`, an allowlist server, and `serve.ps1`)

@@ -96,5 +96,5 @@ If the server isn't running: `powershell -ExecutionPolicy Bypass -File "<SITE_DI
 
 ## Hosting (one-time)
 1. Install Tailscale and log in (the user does this). In the admin console, enable HTTPS and Funnel.
-2. `serve.ps1` starts `python -m http.server` on 127.0.0.1:`PORT` and runs `tailscale funnel --bg PORT`.
+2. `serve.ps1` starts `serve.py` (an **allowlist** server: only the pages, `catalog.json`, `assets/` and `exams/`; never `.env`, `sources/` or `.git`) on 127.0.0.1:`PORT`, then runs `tailscale funnel --bg PORT`. Never serve the site with plain `python -m http.server`, which would publish personal notes.
 3. Create a Scheduled Task to run `serve.ps1` at logon, and turn off PC sleep so the site stays up.
